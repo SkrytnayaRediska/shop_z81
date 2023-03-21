@@ -12,6 +12,7 @@ psycopg2 = "^2.9.5"
 django = "^4.1.7"
 djangorestframework = "^3.14.0"
 django-environ = "^0.10.0"
+djoser = "^2.1.0"
 
 
 [build-system]

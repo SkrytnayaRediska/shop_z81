@@ -13,20 +13,35 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 from pathlib import Path
 import environ
 import os
+from datetime import timedelta
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 env = environ.Env()
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
+
+SECRET_KEY = env('SECRET_KEY')
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+# SECRET_KEY = 'django-insecure-m+kgb$vebi7rrcajksn=)i6n3xbq47#sjl!ifgj_pi^5j9(^n4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = True
 
 ALLOWED_HOSTS = []
 
@@ -40,10 +55,33 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
+    'djoser',
     'rest_framework',
-
-    'users.apps.UsersConfig',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=10),
+}
+AUTH_USER_MODEL = 'users.CustomUser'
+
+DJOSER = {
+    'SEND_ACTIVATION_EMAIL': True,
+    'ACTIVATION_URL': 'accounts/activate/{uid}/{token}',
+}
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
