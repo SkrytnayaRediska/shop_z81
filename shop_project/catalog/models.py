@@ -23,12 +23,18 @@ class Producer(models.Model):
     description = models.TextField()
     country = models.CharField(max_length=100)
 
+    def __str__(self):
+        return f"{self.name} - {self.country}"
+
 
 class Discount(models.Model):
     percent = models.IntegerField()
     name = models.CharField(max_length=100)
     date_start = models.DateField()
     date_end = models.DateField()
+
+    def __str__(self):
+        return self.name
 
 
 class Product(models.Model):
@@ -41,6 +47,9 @@ class Product(models.Model):
     category = models.ForeignKey(Category, null=True, blank=True, on_delete=models.SET_NULL)
     producer = models.ForeignKey(Producer, null=True, blank=True, on_delete=models.SET_NULL)
 
+    def __str__(self):
+        return self.name
+
 
 class Promocode(models.Model):
     name = models.CharField(max_length=100)
@@ -48,6 +57,9 @@ class Promocode(models.Model):
     date_start = models.DateField()
     date_end = models.DateField()
     is_cumulative = models.BooleanField()
+
+    def __str__(self):
+        return self.name
 
 
 class Basket(models.Model):
@@ -113,6 +125,3 @@ class OrderProducts(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     count = models.IntegerField()
-
-
-
