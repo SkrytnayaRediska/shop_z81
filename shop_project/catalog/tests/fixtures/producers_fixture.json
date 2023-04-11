@@ -1,0 +1,20 @@
+[
+    {
+        "model": "catalog.producer",
+        "pk": 1,
+        "fields": {
+            "name": "Producer 1",
+            "description": "mdlkvmadnlknvgaeknbadlkbnefk;",
+            "country": "Belarus"
+        }
+    },
+    {
+        "model": "catalog.producer",
+        "pk": 2,
+        "fields": {
+            "name": "Producer 2",
+            "description": "fmnvsadlnbalkenbvakemnbdv",
+            "country": "Kazakhstan"
+        }
+    }
+]

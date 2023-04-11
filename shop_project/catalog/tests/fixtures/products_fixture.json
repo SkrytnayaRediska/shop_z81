@@ -1,0 +1,30 @@
+[
+    {
+        "model": "catalog.product",
+        "pk": 1,
+        "fields": {
+            "name": "Product 1",
+            "price": "100.00",
+            "count_on_stock": 10,
+            "articul": "12345",
+            "description": "hgetjethjetyjetyjh",
+            "discount": 1,
+            "category": 1,
+            "producer": 1
+        }
+    },
+    {
+        "model": "catalog.product",
+        "pk": 2,
+        "fields": {
+            "name": "Product 2",
+            "price": "300.00",
+            "count_on_stock": 15,
+            "articul": "1234567",
+            "description": "rhtyjetyjsrthsrthsrtgrs",
+            "discount": 2,
+            "category": 2,
+            "producer": 2
+        }
+    }
+]
