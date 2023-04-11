@@ -65,7 +65,7 @@ class Promocode(models.Model):
 class Basket(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    count = models.IntegerField()
+    count = models.IntegerField(null=True, blank=True)
 
 
 class Order(models.Model):
@@ -98,7 +98,7 @@ class Order(models.Model):
         (1, 1)
     )
 
-    date_created = models.DateTimeField()
+    date_created = models.DateTimeField(auto_now_add=True)
     promocode = models.ForeignKey(Promocode, null=True, blank=True, on_delete=models.SET_NULL)
     delivery_time = models.DateTimeField()
     delivery_notif_in_time = models.IntegerField(choices=DELIVERY_NOTIF_IN_TIME,
