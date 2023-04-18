@@ -119,7 +119,7 @@ class OrderView(APIView):
     permission_classes = (IsAuthenticated, )
 
     def post(self, request):
-        input_serializer = OrderSerializer(data=request.data, context={"request": request})
+        input_serializer = OrderSerializer(data=request.data, context={'request': request})
         input_serializer.is_valid(raise_exception=True)
 
         order = input_serializer.save()
