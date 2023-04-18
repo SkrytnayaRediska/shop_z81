@@ -4,7 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from catalog.serializers import CategorySerializer, ProducerSerializer, DiscountSerializer, \
-    PromocodeSerializer, ProductSerializer, BasketSerializer, AddProductSerializer, DeleteProductSerializer
+    PromocodeSerializer, ProductSerializer, BasketSerializer, AddProductSerializer, \
+    DeleteProductSerializer, OrderSerializer
 from django.db.models import F
 from django.shortcuts import get_object_or_404
 
@@ -112,3 +113,15 @@ class BasketView(APIView):
         Basket.objects.get(user=request.user, product=product).delete()
 
         return Response()
+
+
+class OrderView(APIView):
+    permission_classes = (IsAuthenticated, )
+
+    def post(self, request):
+        input_serializer = OrderSerializer(data=request.data, context={'request': request})
+        input_serializer.is_valid(raise_exception=True)
+
+        order = input_serializer.save()
+
+        return Response(input_serializer.data)
