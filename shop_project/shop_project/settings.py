@@ -51,12 +51,24 @@ INSTALLED_APPS = [
     'catalog',
     'djoser',
     'rest_framework',
+    'django_celery_beat',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'api_key': {
+            'type': 'apiKey',
+            'description': 'Personal API Key authorization',
+            'name': 'Authorization',
+            'in': 'header',
+        }
+    }
 }
 
 SIMPLE_JWT = {
@@ -76,6 +88,12 @@ AUTHENTICATION_BACKENDS = (
     'rest_framework_simplejwt.authentication.JWTAuthentication',
 )
 
+CELERY_BROKER_URL = f'redis://{env("CELERY_HOST")}:{env("CELERY_PORT")}'
+CELERY_RESULT_BACKEND = f'redis://{env("CELERY_HOST")}:{env("CELERY_PORT")}'
+CELERY_IMPORTS = [
+    "catalog.tasks"
+]
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -91,8 +109,8 @@ ROOT_URLCONF = 'shop_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
         'APP_DIRS': True,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
