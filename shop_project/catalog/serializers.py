@@ -95,7 +95,7 @@ class OrderSerializer(serializers.ModelSerializer):
         fields = ['date_created', 'promocode', 'delivery_time',
                   'delivery_notif_in_time', 'delivery_method',
                   'delivery_address', 'delivery_status',
-                  'payment_method', 'payment_status', 'user',
+                  'payment_method', 'payment_status',
                   'result_price', 'products', 'use_cashback']
         read_only_fields = ['date_created', 'delivery_status',
                             'payment_status', 'result_price']

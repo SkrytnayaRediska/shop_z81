@@ -8,6 +8,8 @@ from catalog.serializers import CategorySerializer, ProducerSerializer, Discount
     DeleteProductSerializer, OrderSerializer
 from django.db.models import F
 from django.shortcuts import get_object_or_404
+from catalog.tasks import some_task
+from drf_yasg.utils import swagger_auto_schema
 
 
 class CategoriesListView(ListAPIView):
@@ -16,12 +18,14 @@ class CategoriesListView(ListAPIView):
     serializer_class = CategorySerializer
 
 
+
 class CategoryProductsView(APIView):
     permission_classes = (AllowAny, )
 
     def get(self, request, category_id):
         queryset = Product.objects.filter(category__id=category_id)
         serializer = ProductSerializer(queryset, many=True)
+        some_task.delay()
         return Response(serializer.data)
 
 
@@ -73,6 +77,13 @@ class ProductsListView(ListAPIView):
 class BasketView(APIView):
     permission_classes = (IsAuthenticated, )
 
+    @swagger_auto_schema(
+        request_method='GET',
+        responses={
+            200: BasketSerializer
+        },
+        tags=['catalog']
+    )
     def get(self, request):
         user = request.user
         basket = Product.objects.prefetch_related("basket_set").filter(basket__user=user).values(
@@ -83,7 +94,22 @@ class BasketView(APIView):
 
         return Response(serializer.data)
 
+
+    @swagger_auto_schema(
+        request_body=AddProductSerializer,
+        request_method='POST',
+        responses={
+            200: ''
+        },
+        tags=['catalog']
+    )
     def post(self, request):
+        """
+        number_of_items > 0 if need sum with current count of the product in cart
+        number_of_items < 0 if need subtract from current count of the product in cart
+        If you subtract more than user has in the basket,
+            there will be no such product in the cart anymore
+        """
         input_serializer = AddProductSerializer(data=request.data)
         input_serializer.is_valid(raise_exception=True)
 
@@ -103,6 +129,15 @@ class BasketView(APIView):
 
         return Response()
 
+
+    @swagger_auto_schema(
+        request_body=DeleteProductSerializer,
+        request_method='DELETE',
+        responses={
+            200: ''
+        },
+        tags=['catalog']
+    )
     def delete(self, request):
         input_serializer = DeleteProductSerializer(data=request.data)
         input_serializer.is_valid(raise_exception=True)
@@ -118,6 +153,13 @@ class BasketView(APIView):
 class OrderView(APIView):
     permission_classes = (IsAuthenticated, )
 
+    @swagger_auto_schema(
+        request_body=OrderSerializer,
+        request_method='POST',
+        responses={
+            200: OrderSerializer
+        }
+    )
     def post(self, request):
         input_serializer = OrderSerializer(data=request.data, context={'request': request})
         input_serializer.is_valid(raise_exception=True)
