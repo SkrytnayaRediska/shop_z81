@@ -3,8 +3,7 @@ name = "shop-z81-django"
 version = "0.1.0"
 description = ""
 authors = ["SkrytnayaRediska <olga@arusnavi.ru>"]
-readme = "README.md"
-packages = [{include = "shop_z81_django"}]
+
 
 [tool.poetry.dependencies]
 python = "^3.10"
@@ -18,7 +17,6 @@ pathlib = "^1.0.1"
 pytest-django = "^4.5.2"
 celery = "^5.2.7"
 redis = "^4.5.4"
-aiogram = "^2.25.1"
 
 
 [build-system]
