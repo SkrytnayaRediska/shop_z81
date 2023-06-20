@@ -48,4 +48,5 @@ jobs:
     - name: Run Tests
 
       run: |
+        cd shop_project
         pytest
