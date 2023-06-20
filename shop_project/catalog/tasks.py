@@ -11,3 +11,8 @@ def some_task():
 @shared_task
 def test_scheduled_task():
     return 'susibaka'
+
+
+@shared_task
+def test_test_task():
+    return 'susibaka'
