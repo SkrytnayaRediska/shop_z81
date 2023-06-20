@@ -43,7 +43,7 @@ jobs:
 
     - name: Lint with Prospector
       run: |
-        procpector
+        prospector
 
 
     - name: Run Tests
