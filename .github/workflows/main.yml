@@ -44,6 +44,9 @@ jobs:
       run: |
         prospector || true
 
+    - name: Set up .env
+      run: |
+        echo "${{ secrets.ENV_FILE }}" > .env
 
     - name: Run Tests
 
