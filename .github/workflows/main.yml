@@ -37,3 +37,8 @@ jobs:
       - name: Lint with Prospector
         run: |
           prospector || true
+
+      - name: Run Tests
+        run: |
+          cd shop_project
+          pytest
