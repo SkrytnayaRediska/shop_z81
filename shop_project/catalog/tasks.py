@@ -15,4 +15,4 @@ def test_scheduled_task():
 
 @shared_task
 def test_test_task():
-    return 'susibaka'
+    return 'test'
