@@ -15,17 +15,6 @@ jobs:
       matrix:
         python-version: [ 3.9 ]
 
-    services:
-      db:
-        image: postgres:12.0-alpine
-        volumes:
-          - postgres_data:/app
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: 12345
-          POSTGRES_DB: shop_db_test
-        ports: ['5432:5432']
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
     - uses: actions/checkout@v2
@@ -40,6 +29,14 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r shop_project/requirements.txt
 
+    - name: Setup Docker
+      uses: docker-practice/actions-setup-docker@v1
+
+    - name: Docker Compose up
+      run: |
+        cd shop_project
+        docker-compose up -d db
+
     - name: Lint with Prospector
       run: |
         prospector || true
@@ -51,5 +48,4 @@ jobs:
     - name: Run Tests
 
       run: |
-        cd shop_project
         pytest
